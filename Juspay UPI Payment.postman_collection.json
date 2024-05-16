@@ -1,0 +1,1258 @@
+{
+	"info": {
+		"_postman_id": "e63fbeb9-6e5f-45d5-ad0c-9ec6e3cf181f",
+		"name": "Juspay UPI Payment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34510611"
+	},
+	"item": [
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "CreateCustomer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"custId\",jsonData.id);\r",
+									"pm.environment.set(\"cust_firstname\",jsonData.first_name);\r",
+									"pm.environment.set(\"cust_lastname\",jsonData.last_name);\r",
+									"pm.environment.set(\"cust_mobileno\",jsonData.mobile_number);\r",
+									"pm.environment.set(\"cust_emailadd\",jsonData.email_address);\r",
+									"\r",
+									"//for validating response status code \r",
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//for validating the response body content\r",
+									"pm.test(\"Response body key values validation is correct\",() =>{\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    //pm.expect(jsonData.first_name).to.eql('Raju');\r",
+									"    //pm.expect(jsonData.last_name).to.eql('Test');\r",
+									"    //pm.expect(jsonData.mobile_number).to.eql('1122334455');\r",
+									"    //pm.expect(jsonData.email_address).to.eql('mycustomer001@gmail.com');\r",
+									"    pm.expect(jsonData.mobile_country_code).to.eql('91');    \r",
+									"})\r",
+									"\r",
+									"//for validating cookies presence\r",
+									"pm.test(\"Cookies validation\", ()=> {\r",
+									"    pm.expect(pm.cookies.has(\"tokenization_cookie_version_Eulertest\")).to.be.true\r",
+									"});\r",
+									"\r",
+									"//for validating the values of cookies\r",
+									"pm.test(\"Check cookie value\", function(){\r",
+									"    pm.expect(pm.cookies.get(\"tokenization_cookie_version_Eulertest\")).to.be.eql(\"1\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"//json schema validation\r",
+									"var schema = {\r",
+									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"first_name\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"mobile_country_code\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"last_updated\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"object_reference_id\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"mobile_number\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"juspay\": {\r",
+									"      \"type\": \"object\",\r",
+									"      \"properties\": {\r",
+									"        \"client_auth_token_expiry\": {\r",
+									"          \"type\": \"string\"\r",
+									"        },\r",
+									"        \"client_auth_token\": {\r",
+									"          \"type\": \"string\"\r",
+									"        }\r",
+									"      },\r",
+									"      \"required\": [\r",
+									"        \"client_auth_token_expiry\",\r",
+									"        \"client_auth_token\"\r",
+									"      ]\r",
+									"    },\r",
+									"    \"last_name\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"object\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"email_address\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"id\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"date_created\": {\r",
+									"      \"type\": \"string\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"first_name\",\r",
+									"    \"mobile_country_code\",\r",
+									"    \"last_updated\",\r",
+									"    \"object_reference_id\",\r",
+									"    \"mobile_number\",\r",
+									"    \"juspay\",\r",
+									"    \"last_name\",\r",
+									"    \"object\",\r",
+									"    \"email_address\",\r",
+									"    \"id\",\r",
+									"    \"date_created\"\r",
+									"  ]\r",
+									"};\r",
+									"pm.test('Schema is valid', function(){\r",
+									"  pm.expect(tv4.validate(jsonData, schema)).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"var firstName = \"{{$randomFirstName}}\";\r",
+									"console.log(firstName);\r",
+									"pm.environment.set(\"first_name\", firstName);\r",
+									"\r",
+									"var lastName = \"{{$randomLastName}}\"\r",
+									"console.log(lastName);\r",
+									"pm.environment.set(\"last_name\", lastName);\r",
+									"\r",
+									"const id = Math.floor(Math.random()*1000);\r",
+									"var emailAdd = \"abc\"+id+\"@gmail.com\";\r",
+									"console.log(emailAdd);\r",
+									"pm.variables.set(\"email_address\", emailAdd);\r",
+									"\r",
+									"var randomMobile =  Math.random().toString().slice(2,12);\r",
+									"pm.variables.set(\"mobile_number\",randomMobile );\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-merchantid",
+								"value": "{{MerchantId}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "object_reference_id",
+									"value": "{{email_address}}",
+									"type": "text"
+								},
+								{
+									"key": "mobile_number",
+									"value": "{{mobile_number}}",
+									"type": "text"
+								},
+								{
+									"key": "email_address",
+									"value": "{{email_address}}",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "{{first_name}}",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "{{last_name}}",
+									"type": "text"
+								},
+								{
+									"key": "mobile_country_code",
+									"value": "91",
+									"type": "text"
+								},
+								{
+									"key": "options.get_client_auth_token",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/customers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating presence of response time\r",
+									"pm.test(\"presence of response time\", ()=>{\r",
+									"    pm.response.to.have.responseTime;\r",
+									"    console.log(pm.response.responseTime);\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);   \r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//for validating cookies presence\r",
+									"pm.test(\"Cookies validation\", ()=> {\r",
+									"    pm.expect(pm.cookies.has(\"tokenization_cookie_version_Eulertest\")).to.be.true\r",
+									"});\r",
+									"\r",
+									"//for validating the values of cookies\r",
+									"pm.test(\"Check cookie value\", function(){\r",
+									"    pm.expect(pm.cookies.get(\"tokenization_cookie_version_Eulertest\")).to.be.eql(\"1\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "x-merchantid",
+								"value": "{{MerchantId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/customers/{{custId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"{{custId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//for validating response status code \r",
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"//for validating the response body content\r",
+									"pm.test(\"Response body key values validation is correct\",() =>{\r",
+									"    var jsonData = JSON.parse(responseBody);    \r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.mobile_country_code).to.eql('91');    \r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "mobile_number",
+									"value": "{{cust_mobileno}}",
+									"type": "text"
+								},
+								{
+									"key": "email_address",
+									"value": "{{cust_emailadd}}",
+									"type": "text"
+								},
+								{
+									"key": "first_name",
+									"value": "{{first_name}}",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "{{last_name}}",
+									"type": "text"
+								},
+								{
+									"key": "mobile_country_code",
+									"value": "91",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/customers/{{custId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"customers",
+								"{{custId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Create Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"orderId\",jsonData.order_id);\r",
+									"\r",
+									"//for validating response status code \r",
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body key values validation is correct\",() =>{\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  //  pm.expect(jsonData.status).to.eql('CREATED'); \r",
+									"});\r",
+									"\r",
+									"//for validating cookies presence\r",
+									"pm.test(\"Cookies validation\", ()=> {\r",
+									"    pm.expect(pm.cookies.has(\"tokenization_cookie_version_Eulertest\")).to.be.true\r",
+									"});\r",
+									"\r",
+									"//for validating the values of cookies\r",
+									"pm.test(\"Check cookie value\", function(){\r",
+									"    pm.expect(pm.cookies.get(\"tokenization_cookie_version_Eulertest\")).to.be.eql(\"1\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const id = Math.floor(Math.random()*1000);\r",
+									"var orderid = id;\r",
+									"pm.environment.set(\"order_id\",id);\r",
+									"\r",
+									"var prodId = \"prod-\"+id;\r",
+									"pm.environment.set(\"product_id\", prodId);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "x-merchantid",
+								"value": "Eulertest",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "order_id",
+									"value": "{{order_id}}",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "1000",
+									"type": "text"
+								},
+								{
+									"key": "currency",
+									"value": "INR",
+									"type": "text"
+								},
+								{
+									"key": "customer_id",
+									"value": "{{custId}}",
+									"type": "text"
+								},
+								{
+									"key": "customer_email",
+									"value": "{{cust_emailadd}}",
+									"type": "text"
+								},
+								{
+									"key": "customer_phone",
+									"value": "{{cust_mobileno}}",
+									"type": "text"
+								},
+								{
+									"key": "product_id",
+									"value": "{{product_id}}",
+									"type": "text"
+								},
+								{
+									"key": "return_url",
+									"value": "http://shop.merchant.com/payments/handleResponse",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Sample description",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_first_name",
+									"value": "Juspay",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_last_name",
+									"value": "Technologies",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_line1",
+									"value": "Girija Building",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_line2",
+									"value": "Ganapathi Temple Road",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_line3",
+									"value": "8th Block, Koramangala",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_city",
+									"value": "Bengaluru",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_state",
+									"value": "Karnataka",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_country",
+									"value": "India",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_postal_code",
+									"value": "560095",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_phone",
+									"value": "9988775566",
+									"type": "text"
+								},
+								{
+									"key": "billing_address_country_code_iso",
+									"value": "IND",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_first_name",
+									"value": "{{cust_firstname}}",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_last_name",
+									"value": "{{cust_lastname}}",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_line1",
+									"value": "Add1",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_line2",
+									"value": "Add2",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_line3",
+									"value": "Add3",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_city",
+									"value": "Mumbai",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_state",
+									"value": "Maharashtra",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_postal_code",
+									"value": "10001",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_phone",
+									"value": "{{cust_mobileno}}",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_country_code_iso",
+									"value": "IND",
+									"type": "text"
+								},
+								{
+									"key": "shipping_address_country",
+									"value": "India",
+									"type": "text"
+								},
+								{
+									"key": "metadata.PAYTM:PROMO_CAMP_ID",
+									"value": "xyz",
+									"type": "text"
+								},
+								{
+									"key": "metadata.PAYTM:CUST_ID",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "metadata.PAYU:offer_key",
+									"value": "1234",
+									"type": "text"
+								},
+								{
+									"key": "options.get_client_auth_token",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get OrderDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"MaxRefundAmount\",jsonData.maximum_eligible_refund_amount);\r",
+									"pm.environment.set(\"OrderAmount\",jsonData.amount);\r",
+									"\r",
+									"//for validating response status code \r",
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body key values validation is correct\",() =>{\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"    pm.expect(jsonData.status).to.eql('NEW'); \r",
+									"});\r",
+									"\r",
+									"//for validating cookies presence\r",
+									"pm.test(\"Cookies validation\", ()=> {\r",
+									"    pm.expect(pm.cookies.has(\"tokenization_cookie_version_Eulertest\")).to.be.true\r",
+									"});\r",
+									"\r",
+									"//for validating the values of cookies\r",
+									"pm.test(\"Check cookie value\", function(){\r",
+									"    pm.expect(pm.cookies.get(\"tokenization_cookie_version_Eulertest\")).to.be.eql(\"1\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "x-merchantid",
+								"value": "Eulertest",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/orders/{{orderId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction UPI",
+			"item": [
+				{
+					"name": "Verify VPA",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var randomMobile =  Math.random().toString().slice(2,12);\r",
+									"var vpa = randomMobile+\"@upi\";\r",
+									"console.log(vpa);\r",
+									"pm.variables.set(\"vpa\",vpa );"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "cache-control",
+								"value": "no-cache",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "vpa",
+									"value": "test123@upi",
+									"type": "text"
+								},
+								{
+									"key": "merchant_id",
+									"value": "Eulertest",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/v2/upi/verify-vpa",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v2",
+								"upi",
+								"verify-vpa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPI Transaction",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "order_id",
+									"value": "{{orderId}}",
+									"type": "text"
+								},
+								{
+									"key": "merchant_id",
+									"value": "Eulertest",
+									"type": "text"
+								},
+								{
+									"key": "payment_method_type",
+									"value": "UPI",
+									"type": "text"
+								},
+								{
+									"key": "payment_method",
+									"value": "UPI",
+									"type": "text"
+								},
+								{
+									"key": "txn_type",
+									"value": "UPI_COLLECT",
+									"type": "text"
+								},
+								{
+									"key": "upi_vpa",
+									"value": "test123@upi",
+									"type": "text"
+								},
+								{
+									"key": "redirect_after_payment",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "format",
+									"value": "json",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/txns",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"txns"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction Status",
+			"item": [
+				{
+					"name": "Transaction status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"MaxRefundAmount1\",jsonData.maximum_eligible_refund_amount);\r",
+									"\r",
+									"\r",
+									"//for validating response status code \r",
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"    \r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body key values validation is correct\",() =>{\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  //  pm.expect(jsonData.status).to.eql('CREATED'); \r",
+									"});\r",
+									"\r",
+									"//for validating cookies presence\r",
+									"pm.test(\"Cookies validation\", ()=> {\r",
+									"    pm.expect(pm.cookies.has(\"tokenization_cookie_version_Eulertest\")).to.be.true\r",
+									"});\r",
+									"\r",
+									"//for validating the values of cookies\r",
+									"pm.test(\"Check cookie value\", function(){\r",
+									"    pm.expect(pm.cookies.get(\"tokenization_cookie_version_Eulertest\")).to.be.eql(\"1\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/orders/{{orderId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Refund",
+			"item": [
+				{
+					"name": "Refund Request",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const id = Math.floor(Math.random()*100);\r",
+									"var uniqueReqId = \"abc\"+id;\r",
+									"console.log(uniqueReqId);\r",
+									"pm.variables.set(\"unique_request_id\", uniqueReqId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"//for validating response status code \r",
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body key values validation is correct\",() =>{\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  //  pm.expect(jsonData.status).to.eql('CREATED'); \r",
+									"});\r",
+									"\r",
+									"//for validating cookies presence\r",
+									"pm.test(\"Cookies validation\", ()=> {\r",
+									"    pm.expect(pm.cookies.has(\"tokenization_cookie_version_Eulertest\")).to.be.true\r",
+									"});\r",
+									"\r",
+									"//for validating the values of cookies\r",
+									"pm.test(\"Check cookie value\", function(){\r",
+									"    pm.expect(pm.cookies.get(\"tokenization_cookie_version_Eulertest\")).to.be.eql(\"1\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "x-merchantid",
+								"value": "Eulertest",
+								"type": "text"
+							},
+							{
+								"key": "version",
+								"value": "2024-05-01",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "unique_request_id",
+									"value": "{{unique_request_id}}",
+									"type": "text"
+								},
+								{
+									"key": "amount",
+									"value": "{{MaxRefundAmount1}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/orders/{{orderId}}/refunds",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}",
+								"refunds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refund Request Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"//for validating response status code \r",
+									"pm.test(\"Status code is 200\", ()=>{\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"    //pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\",()=>{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"});\r",
+									"\r",
+									"//for validating response status string\r",
+									"pm.test(\"Status code has OK string\",()=>{\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"//for validating response time and it's limit\r",
+									"pm.test(\"Response time is less than 200ms\", ()=>{\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type is present in header values\r",
+									"pm.test(\"Content-Type header is present\", ()=>{\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//for validating Content-Type value is present and matching in header values\r",
+									"pm.test(\"Content-Type header is application/json\", ()=>{\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body key values validation is correct\",() =>{\r",
+									"    pm.expect(jsonData).to.be.an(\"object\");\r",
+									"  //  pm.expect(jsonData.status).to.eql('CREATED'); \r",
+									"});\r",
+									"\r",
+									"//for validating cookies presence\r",
+									"pm.test(\"Cookies validation\", ()=> {\r",
+									"    pm.expect(pm.cookies.has(\"tokenization_cookie_version_Eulertest\")).to.be.true\r",
+									"});\r",
+									"\r",
+									"//for validating the values of cookies\r",
+									"pm.test(\"Check cookie value\", function(){\r",
+									"    pm.expect(pm.cookies.get(\"tokenization_cookie_version_Eulertest\")).to.be.eql(\"1\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/orders/{{orderId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "91F045FE04341EF894BDE820668900",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
